@@ -1,18 +1,16 @@
-# GitHub Release Template (v1.0.0)
+# GitHub Release Template (v1.0.1)
 
 ## Title
-`Quik-R v1.0.0`
+`Quik-R v1.0.1`
 
 ## Description
-See details from `RELEASE_NOTES_v1.0.0.md`.
+See details from `RELEASE_NOTES_v1.0.1.md`.
 
 ### Quick summary
-- Floating quick-reply balloons
-- Full-screen aim + target pulse
-- Paste and paste+send actions
-- Search, reorder, style customization
-- System tray controls
-- Wizard installer
+- Fixed missing System Tray icon
+- Header close (`X`) now exits the entire app (including Tray)
+- Balloon data now persists correctly after app restart
+- Prevented duplicate Tray icons on repeated app launch
 
 ## Assets to upload
 1. `dist/Quik-R-Setup.exe`
