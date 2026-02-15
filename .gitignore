@@ -1,0 +1,22 @@
+# Build output
+bin/
+obj/
+
+# IDE
+.vs/
+.vscode/
+*.user
+*.suo
+
+# OS
+Thumbs.db
+Desktop.ini
+
+# Local app/runtime data
+balloons/
+
+# Release artifacts (upload as GitHub Release assets instead)
+dist/
+
+# Logs
+*.log
