@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -19,7 +20,7 @@ public partial class MainWindow : Window
     private const int MaxVisibleBalloons = 10;
 
     private readonly List<BalloonWindow> _balloons = new();
-    private readonly string _balloonStorePath = Path.Combine(AppContext.BaseDirectory, "balloons");
+    private readonly string _balloonStorePath;
     private readonly NotifyIcon _trayIcon;
     private readonly JsonSerializerOptions _jsonOptions = new() { WriteIndented = true };
     private readonly Icon _trayAppIcon;
@@ -31,6 +32,7 @@ public partial class MainWindow : Window
     private bool _hasTargetPoint;
     private bool _isAimSelecting;
     private bool _isExiting;
+    private bool _isShuttingDownWindows;
     private string _searchText = string.Empty;
 
     public MainWindow()
@@ -39,7 +41,11 @@ public partial class MainWindow : Window
         Left = 30;
         Top = 30;
 
+        string appDataRoot = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Quik-R");
+        _balloonStorePath = Path.Combine(appDataRoot, "balloons");
+
         Directory.CreateDirectory(_balloonStorePath);
+        TryMigrateLegacyBalloonData();
 
         _trayAppIcon = LoadTrayIcon();
 
@@ -170,7 +176,7 @@ public partial class MainWindow : Window
 
     private void CloseButton_OnClick(object sender, RoutedEventArgs e)
     {
-        HideToTray();
+        ExitApplication();
     }
 
     private void CollapseButton_OnClick(object sender, RoutedEventArgs e)
@@ -445,6 +451,11 @@ public partial class MainWindow : Window
             return;
         }
 
+        if (_isShuttingDownWindows)
+        {
+            return;
+        }
+
         if (_balloons.Contains(balloon))
         {
             RemoveBalloon(balloon, fromClosedEvent: true);
@@ -644,6 +655,8 @@ public partial class MainWindow : Window
 
     private void OnMainWindowClosed(object? sender, EventArgs e)
     {
+        _isShuttingDownWindows = true;
+
         if (_trayIcon.Visible)
         {
             _trayIcon.Visible = false;
@@ -654,6 +667,7 @@ public partial class MainWindow : Window
 
         foreach (BalloonWindow balloon in _balloons.ToArray())
         {
+            balloon.Closed -= BalloonOnClosed;
             balloon.Close();
         }
     }
@@ -699,7 +713,42 @@ public partial class MainWindow : Window
             return new Icon(iconPath);
         }
 
+        string currentExePath = Process.GetCurrentProcess().MainModule?.FileName ?? string.Empty;
+        if (!string.IsNullOrWhiteSpace(currentExePath) && File.Exists(currentExePath))
+        {
+            System.Drawing.Icon? extracted = System.Drawing.Icon.ExtractAssociatedIcon(currentExePath);
+            if (extracted is not null)
+            {
+                return (Icon)extracted.Clone();
+            }
+        }
+
         return (Icon)SystemIcons.Application.Clone();
+    }
+
+    private void TryMigrateLegacyBalloonData()
+    {
+        string legacyDir = Path.Combine(AppContext.BaseDirectory, "balloons");
+        if (!Directory.Exists(legacyDir))
+        {
+            return;
+        }
+
+        foreach (string file in Directory.GetFiles(legacyDir, "*.*", SearchOption.TopDirectoryOnly))
+        {
+            string extension = Path.GetExtension(file).ToLowerInvariant();
+            if (extension is not ".json" and not ".txt")
+            {
+                continue;
+            }
+
+            string fileName = Path.GetFileName(file);
+            string destination = Path.Combine(_balloonStorePath, fileName);
+            if (!File.Exists(destination))
+            {
+                File.Copy(file, destination, overwrite: false);
+            }
+        }
     }
 
     private List<BalloonWindow> GetFilteredBalloons()

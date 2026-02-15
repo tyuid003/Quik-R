@@ -1,125 +1,93 @@
 # Quik-R (Quick Reply Balloon)
 
+วันที่อัปเดต / Updated: 2026-02-15
+
 ## ไทย
 
-### ภาพรวม
-Quik-R คือโปรแกรม WPF สำหรับข้อความตอบกลับด่วนแบบบอลลูนลอย (Floating Balloons) บน Windows
+### แนะนำโปรแกรม
+Quik-R เป็นโปรแกรมสำหรับส่งข้อความตอบกลับแบบกึ่งอัตโนมัติ (Quick Reply) เหมาะสำหรับใช้งานกับไลน์ OA โดยภายในโปรแกรมจะมี “บอลลูนข้อความ” ที่บันทึกข้อความไว้ล่วงหน้า
 
-ฟีเจอร์หลัก:
-- Header ลอยด้านบนสุด
-- บอลลูนข้อความเรียงลงล่างและเลื่อน (scroll) ได้
-- ระบบ Aim เลือกหน้าต่างเป้าหมายเพื่อวางข้อความ
-- ปุ่มวางทันที (`คลิกข้อความ`) และปุ่มวาง+ส่ง (`➤`)
-- บันทึกข้อความ, ชื่อแสดงผล, สี, ความโปร่งใส ต่อบอลลูน
-- System Tray (Open / Exit)
+• เมื่อคลิกที่บอลลูน ระบบจะวางข้อความที่บันทึกไว้ลงในช่องแชทโดยอัตโนมัติ  
+• หากคลิกที่ปุ่ม ➤ ระบบจะวางข้อความและส่งทันที
 
----
+หมายเหตุ: ก่อนเริ่มใช้งานทุกครั้ง จำเป็นต้องกดปุ่ม ◎ เพื่อกำหนดตำแหน่ง (เล็งเป้า) ไปที่ช่องแชทก่อน เพื่อให้โปรแกรมทราบตำแหน่งช่องแชทบนหน้าจอและทำงานได้อย่างถูกต้อง
+
+### ฟีเจอร์หลัก
+- บอลลูนข้อความลอย (Floating balloons)
+- Header ลอยบนสุด พร้อมปุ่มเพิ่ม, ค้นหา, Aim, ย่อเข้า Tray, ปิดโปรแกรม
+- รองรับลากสลับลำดับบอลลูนด้วยปุ่ม `☰`
+- ปรับชื่อแสดงผล, สี, ความโปร่งใส ได้ในหน้าต่าง Edit
+- ค้นหาได้ทั้งชื่อแสดงผลและเนื้อหาข้อความ
+- บันทึกข้อมูลถาวร (ข้อความ/ชื่อ/สี/ความโปร่งใส/ลำดับ)
+- System Tray menu: Open / Exit
+- ถ้าเปิดโปรแกรมซ้ำ ระบบจะไม่เปิดซ้ำ และจะดึงหน้าต่างเดิมขึ้นด้านหน้าอัตโนมัติ
 
 ### ความต้องการระบบ
 - Windows 10/11
-- .NET SDK 8.0 (สำหรับ build จาก source)
+- .NET SDK 8.0 (สำหรับการ build จาก source)
 
----
+### วิธีรันจาก source
+```powershell
+Start-Process -FilePath "C:\Program Files\dotnet\dotnet.exe" -ArgumentList 'run --project "c:\Users\BDC\Desktop\QuickReply\QuickReply.csproj"' -Wait -NoNewWindow
+```
 
-### Build เป็น .exe (Portable)
-รันที่โฟลเดอร์โปรเจกต์:
-
+### Build เป็นไฟล์ .exe (Portable)
 ```powershell
 Start-Process -FilePath "C:\Program Files\dotnet\dotnet.exe" -ArgumentList 'publish "c:\Users\BDC\Desktop\QuickReply\QuickReply.csproj" -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true' -Wait -NoNewWindow
 ```
 
-ไฟล์ผลลัพธ์:
+ผลลัพธ์:
 - `bin\Release\net8.0-windows\win-x64\publish\QuickReply.exe`
 
----
+### Setup แบบ Wizard (แนะนำ)
+- ไฟล์ติดตั้ง: `dist\Quik-R-Setup.exe`
+- ใช้งาน: ดับเบิลคลิกเพื่อติดตั้งแบบ Wizard
 
-### Setup (ติดตั้ง)
-มีตัวติดตั้งแบบ Wizard แล้ว:
-- `dist\Quik-R-Setup.exe`
-
-ถ้าต้องการ build ตัวติดตั้งใหม่:
-- `setup\Build-Setup.ps1`
-
-ไฟล์สคริปต์ installer:
-- `setup\QuikR.iss`
-
-ตัวเลือกเดิม (script install):
-มีสคริปต์ติดตั้งให้แล้ว:
-- `setup\Setup-QuikR.bat` (ดับเบิลคลิกได้)
-- หรือ `setup\install.ps1`
-
-สิ่งที่ setup ทำ:
-- คัดลอกไฟล์ไป `LocalAppData\Programs\Quik-R`
-- สร้าง Shortcut ที่ Desktop และ Start Menu
-
----
-
-### Uninstall (ถอนการติดตั้ง)
-รัน:
-- `setup\uninstall.ps1`
-
-สคริปต์จะ:
-- ปิดโปรแกรม Quik-R (ถ้ากำลังเปิด)
-- ลบไฟล์ติดตั้ง
-- ลบ Desktop/Start Menu shortcuts
-
----
-
-### ไอคอนโปรแกรม
-ไฟล์ไอคอนหลัก:
-- `Assets\app.ico`
-
-ตอน build จะถูกใช้เป็น:
-- ไอคอนของไฟล์ EXE
-- ไอคอนใน System Tray
-
----
-
-### อัปขึ้น GitHub (Checklist)
-1) ติดตั้ง Git for Windows: https://git-scm.com/download/win
-2) สร้าง repository ใหม่บน GitHub (เช่น `QuickReply`)
-3) ที่โฟลเดอร์โปรเจกต์ รันคำสั่ง:
-
+### สร้าง Setup.exe ใหม่
 ```powershell
-git init
-git add .
-git commit -m "release: v1.0.0"
-git branch -M main
-git remote add origin https://github.com/<your-user>/<your-repo>.git
-git push -u origin main
+powershell -NoProfile -ExecutionPolicy Bypass -File "setup\Build-Setup.ps1"
 ```
 
-4) สร้าง GitHub Release (v1.0.0) และแนบไฟล์:
-- `dist\Quik-R-Setup.exe`
-- `bin\Release\net8.0-windows\win-x64\publish\QuickReply.exe`
-- ใช้ข้อความจาก `RELEASE_NOTES_v1.0.0.md`
+### Uninstall
+- ถ้าติดตั้งผ่าน Wizard: ใช้ Apps & Features ของ Windows หรือ Uninstall จาก Start Menu
+- ถ้าใช้ script setup เดิม: รัน `setup\uninstall.ps1`
+
+### ไอคอนโปรแกรม
+- ไฟล์หลัก: `Assets\app.ico`
+- ใช้เป็นไอคอน EXE และไอคอนใน System Tray
 
 ---
 
 ## English
 
-### Overview
-Quik-R is a WPF floating quick-reply app for Windows.
+### About
+Quik-R is a semi-automatic quick reply app designed for LINE OA. It provides pre-saved message balloons for faster chat responses.
 
-Key features:
-- Always-on-top header
-- Stacked balloon messages with scrolling
-- Aim mode to select target window/chat input
-- Quick paste (`click message`) and paste+send (`➤`)
-- Per-balloon saved message, display name, color, and opacity
-- System tray controls (Open / Exit)
+• Click a balloon to paste the saved message into the chat box automatically.  
+• Click ➤ to paste and send immediately.
 
----
+Note: Before using Quik-R, click ◎ to set (aim) the target chat input location, so the app knows where to focus and paste.
+
+### Key Features
+- Floating quick-reply balloons
+- Always-on-top header with Add, Search, Aim, Collapse-to-Tray, and Close
+- Reorder balloons with `☰`
+- Edit display name, color, and opacity in the Edit popup
+- Search by both display name and message content
+- Persistent balloon data (text/name/style/order)
+- System tray menu: Open / Exit
+- Single-instance behavior: launching again brings the existing window to front
 
 ### Requirements
 - Windows 10/11
 - .NET SDK 8.0 (for source build)
 
----
+### Run from source
+```powershell
+Start-Process -FilePath "C:\Program Files\dotnet\dotnet.exe" -ArgumentList 'run --project "c:\Users\BDC\Desktop\QuickReply\QuickReply.csproj"' -Wait -NoNewWindow
+```
 
-### Build .exe (Portable)
-Run in project folder:
-
+### Build portable .exe
 ```powershell
 Start-Process -FilePath "C:\Program Files\dotnet\dotnet.exe" -ArgumentList 'publish "c:\Users\BDC\Desktop\QuickReply\QuickReply.csproj" -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true' -Wait -NoNewWindow
 ```
@@ -127,65 +95,19 @@ Start-Process -FilePath "C:\Program Files\dotnet\dotnet.exe" -ArgumentList 'publ
 Output:
 - `bin\Release\net8.0-windows\win-x64\publish\QuickReply.exe`
 
----
+### Wizard Setup (recommended)
+- Installer file: `dist\Quik-R-Setup.exe`
+- Double-click to install via wizard
 
-### Setup (Install)
-Wizard installer is now available:
-- `dist\Quik-R-Setup.exe`
-
-To rebuild installer:
-- `setup\Build-Setup.ps1`
-
-Installer script file:
-- `setup\QuikR.iss`
-
-Legacy script-based install is still available:
-Included setup scripts:
-- `setup\Setup-QuikR.bat` (double-click)
-- or `setup\install.ps1`
-
-Setup actions:
-- Copies app files to `LocalAppData\Programs\Quik-R`
-- Creates Desktop and Start Menu shortcuts
-
----
-
-### Uninstall
-Run:
-- `setup\uninstall.ps1`
-
-This script:
-- Stops Quik-R process if running
-- Removes installed files
-- Removes Desktop/Start Menu shortcuts
-
----
-
-### App Icon
-Primary icon file:
-- `Assets\app.ico`
-
-Used for:
-- EXE application icon
-- System tray icon
-
----
-
-### GitHub Upload (Checklist)
-1) Install Git for Windows: https://git-scm.com/download/win
-2) Create a new GitHub repository (e.g. `QuickReply`)
-3) Run in project folder:
-
+### Rebuild Setup.exe
 ```powershell
-git init
-git add .
-git commit -m "release: v1.0.0"
-git branch -M main
-git remote add origin https://github.com/<your-user>/<your-repo>.git
-git push -u origin main
+powershell -NoProfile -ExecutionPolicy Bypass -File "setup\Build-Setup.ps1"
 ```
 
-4) Create GitHub Release `v1.0.0` and upload assets:
-- `dist\Quik-R-Setup.exe`
-- `bin\Release\net8.0-windows\win-x64\publish\QuickReply.exe`
-- Release notes from `RELEASE_NOTES_v1.0.0.md`
+### Uninstall
+- If installed via Wizard: use Windows Apps & Features or Start Menu uninstall entry
+- If installed via legacy script: run `setup\uninstall.ps1`
+
+### App Icon
+- Main icon file: `Assets\app.ico`
+- Used for EXE icon and system tray icon

@@ -5,6 +5,13 @@ Release date: 2026-02-15
 
 ## ไทย
 
+Quik-R เป็นโปรแกรมสำหรับส่งข้อความตอบกลับแบบกึ่งอัตโนมัติ (Quick Reply) เหมาะสำหรับใช้งานกับไลน์ OA โดยภายในโปรแกรมจะมี “บอลลูนข้อความ” ที่บันทึกข้อความไว้ล่วงหน้า
+
+• เมื่อคลิกที่บอลลูน ระบบจะวางข้อความที่บันทึกไว้ลงในช่องแชทโดยอัตโนมัติ
+• หากคลิกที่ปุ่ม ➤ ระบบจะวางข้อความและส่งทันที
+
+หมายเหตุ: ก่อนเริ่มใช้งานทุกครั้ง จำเป็นต้องกดปุ่ม ◎ เพื่อกำหนดตำแหน่ง (เล็งเป้า) ไปที่ช่องแชทก่อน เพื่อให้โปรแกรมทราบตำแหน่งช่องแชทบนหน้าจอและทำงานได้อย่างถูกต้อง
+
 ### ไฮไลต์
 - ระบบบอลลูนข้อความลอย (Floating Quick Reply)
 - Header ลอยบนสุด พร้อมปุ่มเพิ่ม, Aim, ย่อเข้า Tray และปิด
@@ -28,6 +35,13 @@ Release date: 2026-02-15
 ---
 
 ## English
+
+Quik-R is a semi-automatic quick reply program designed for use with LINE OA. The program provides pre-saved message “balloons” to help you respond more quickly and efficiently.
+
+• Click on a message balloon to automatically paste the saved text into the chat box.
+• Click the ➤ button to paste and send the message instantly.
+
+Note: Before using the program, you must click the ◎ button to set the target position on the chat box. This allows the program to recognize the chat box location on your screen and function correctly.
 
 ### Highlights
 - Floating quick-reply balloons
